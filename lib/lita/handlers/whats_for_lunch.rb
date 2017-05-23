@@ -1,6 +1,7 @@
 module Lita
   module Handlers
     class WhatsForLunch < Handler
+      include ::LitaWhatsForLunch::Restaurants
 
       name = 'lita'
       Lita.configure{|config| name = config.robot.name}

@@ -1,7 +1,7 @@
 require 'json'
 require 'rest-client'
 
-module Lita
+module LitaWhatsForLunch
   module Restaurants
 
     api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
