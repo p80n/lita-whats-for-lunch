@@ -7,8 +7,14 @@ module LitaWhatsForLunch
 
     def pick_restaurant(response)
       api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
-      response.reply("Please provide me with the Google API key of your choosing") unless api_key
-      response.reply("Please provide me with coordinates to center my search around") unless api_key
+      unless api_key
+        response.reply("Please provide me with the Google API key of your choosing")
+        return
+      end
+      unless location
+        response.reply("Please provide me with a location to center my search around")
+        return
+      end
 
       resp = RestClient.get("#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}")
 
