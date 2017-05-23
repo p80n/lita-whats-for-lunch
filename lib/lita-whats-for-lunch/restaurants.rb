@@ -18,6 +18,8 @@ module LitaWhatsForLunch
 
       resp = RestClient.get("#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}")
 
+      p resp.body
+
       # FIXME handle bad response
       restaurants = []
       json = JSON.parse(resp.body)
