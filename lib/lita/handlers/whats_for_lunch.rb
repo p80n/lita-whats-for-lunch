@@ -7,7 +7,7 @@ module Lita
       Lita.configure{|config| name = config.robot.name}
 
       route(/whats for lunch\??/, :pick_restaurant, help: { "#{name}: whats for lunch?" => '#{name} will help you answer the age old question' })
-      route(/lunch?/, :pick_restaurant, help: { "#{name}: lunch?" => '#{name} will help you answer the age old question' })
+      route(/lunch\?$/, :pick_restaurant, help: { "#{name}: lunch?" => '#{name} will help you answer the age old question' })
 
 
       route(/lunch location (\w+)/, :set_location, help: { "#{name}: location LAT,LONG" => 'Set the coordinates for searches to occur arround' })
