@@ -19,13 +19,18 @@ module LitaWhatsForLunch
       response.reply("You are going to: #{random_restaurant(response)}")
     end
 
-    # helper methods
     def pick_breakfast_spot(response)
-      (restaurants(response,'breakfast') - banned_restaurants).sample
+      response.reply "#{random_restaurant(response,'breakfast')} sounds good"
     end
 
-    def random_restaurant(response)
-      (restaurants(response) - banned_restaurants).sample
+    def feeling_choosy(response)
+      keyword = response.matches[0][0]
+      response.reply "What about #{random_restaurant(response,keyword)}?"
+    end
+
+    # helper methods
+    def random_restaurant(response,keyword="")
+      (restaurants(response,keyword) - banned_restaurants).sample
     end
 
     def banned_restaurants
@@ -38,7 +43,7 @@ module LitaWhatsForLunch
         response.reply("Hmmmm.... this is a tough one....")
         restaurants = []
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
-        query = "#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}"
+        query = "#{api_root}?location=#{location}&radius=800&type=restaurant&key=#{api_key}"
         query += "&keyword=#{keyword}" unless keyword.empty?
         puts query
         resp = RestClient.get(query)
