@@ -12,7 +12,7 @@ module LitaWhatsForLunch
 
     def pick_restaurant(response)
       return unless valid?(response)
-      response.reply("You are going to: #{random_restaurant}"
+      response.reply("You are going to: #{random_restaurant}")
     end
 
     # helper methods
