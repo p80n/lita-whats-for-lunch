@@ -53,7 +53,7 @@ module LitaWhatsForLunch
             json = {}
           end
         end
-        Lita.redis.sadd('restaurant', restaurants)
+        Lita.redis.sadd('restaurants', restaurants)
       end
       restaurants
     end
