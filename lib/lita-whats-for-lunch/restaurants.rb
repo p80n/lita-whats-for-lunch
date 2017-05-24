@@ -51,7 +51,7 @@ module LitaWhatsForLunch
     def restaurants(response, keyword="")
       restaurants = Lita.redis.smembers("restaurants:#{keyword}")
       if restaurants.nil? or restaurants.empty?
-        response.reply("Hmmmm.... this is a tough one....")
+        response.reply("Hmmmm.... this is a tough one....") if keyword.blank?
         restaurants = []
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         query = "#{api_root}?location=#{location}&radius=800&type=restaurant&key=#{api_key}"
