@@ -13,7 +13,7 @@ module Lita
 
       route(/what.?s for breakfast\??/, :pick_breakfast_spot, help: { "#{name}: what's for breakfast?" => 'Pick a spot for breakfast' } )
 
-      route(/i(?:.m)* (?:feeling|hungry|jonesing|want)(?: for)* (\w+)/i, :feeling_choosy, help: { "#{name}: i want CUISINE" => "#{name} will search for a spot serving CUSISINE" } )
+      route(/i(?:.m)* (?:craving|feeling|hungry|jonesing|want)(?: for)* (\w+)/i, :feeling_choosy, help: { "#{name}: i'm craving CUISINE" => "#{name} will search for a spot serving CUSISINE" } )
 
       route(/lunch location ([^\s]+)/, :set_location, help: { "#{name}: lunch location LAT,LONG" => 'Set the coordinates for searches to occur arround' })
       route(/lunch api-key (\w+)/, :set_api_key, help: { "#{name}: lunch api-key KEY" => 'Set the Google Maps API key to use' })
