@@ -57,12 +57,13 @@ puts "here"
     def valid?(response)
       unless api_key
         response.reply("Please provide me with the Google API key of your choosing")
-        return
+        return false
       end
       unless location
         response.reply("Please provide me with a location to center my search around")
-        return
+        return false
       end
+      return true
     end
 
     def api_key
