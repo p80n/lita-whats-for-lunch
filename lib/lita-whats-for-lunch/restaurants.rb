@@ -7,6 +7,7 @@ module LitaWhatsForLunch
 
     def ban_restaurant(response)
       Lita.redis.sadd('banned', response.matches[0][0])
+      response.reply("#{response.matches[0][0]} is dead to us :coffin:")
     end
 
     def list_restaurants(response)
