@@ -11,9 +11,9 @@ module LitaWhatsForLunch
 
 
     def pick_restaurant(response)
-
+puts "pick_restaurant"
       return unless valid?(response)
-
+puts "here"
       response.reply("You are going to: #{restaurants(response).sample}")
     end
 
