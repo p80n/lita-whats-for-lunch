@@ -11,6 +11,7 @@ module Lita
       route(/lunch ban (.+)/, :ban_restaurant, help: { "#{name}: ban restaurant" => '#{name} will not suggest this place anymore' })
       route(/lunch options/, :list_restaurants, help: { "#{name}: ban restaurant" => '#{name} will not suggest the indicated dump anymore' })
 
+      route /whats for breakfast\??/, :pick_breakfast_spot
 
       route(/lunch location ([^\s]+)/, :set_location, help: { "#{name}: lunch location LAT,LONG" => 'Set the coordinates for searches to occur arround' })
       route(/lunch api-key (\w+)/, :set_api_key, help: { "#{name}: lunch api-key KEY" => 'Set the Google Maps API key to use' })

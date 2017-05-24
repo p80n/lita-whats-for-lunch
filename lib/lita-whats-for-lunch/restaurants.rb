@@ -16,10 +16,14 @@ module LitaWhatsForLunch
 
     def pick_restaurant(response)
       return unless valid?(response)
-      response.reply("you are going to: #{random_restaurant(response)}")
+      response.reply("You are going to: #{random_restaurant(response)}")
     end
 
     # helper methods
+    def pick_breakfast(response)
+      (restaurants(response,'breakfast') - banned_restaurants).sample
+    end
+
     def random_restaurant(response)
       (restaurants(response) - banned_restaurants).sample
     end
@@ -28,13 +32,15 @@ module LitaWhatsForLunch
       Lita.redis.smembers('banned') || []
     end
 
-    def restaurants(response)
-      restaurants = Lita.redis.smembers('restaurants')
+    def restaurants(response, keyword="")
+      restaurants = Lita.redis.smembers("restaurants:#{keyword}")
       if restaurants.nil? or restaurants.empty?
+        response.reply("Hmmmm.... this is a tough one....")
         restaurants = []
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
-        response.reply("Hmmmm.... this is a tough one....")
-        resp = RestClient.get("#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}")
+        query = "#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}"
+        query += "&keyword=#{keyword}" unless keyword.empty?
+        resp = RestClient.get(query)
 
         # FIXME handle bad response
         json = JSON.parse(resp.body)
