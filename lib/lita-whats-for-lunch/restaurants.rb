@@ -34,7 +34,6 @@ puts "here"
         while json['next_page_token']
           json['results'].each {|result|
             puts "Adding #{result['name']}"
-            Lita.redis.lpush(result['name'])
             restaurants << result['name'] }
           puts "Requesting next page of results in 5 seconds..."
           sleep 5
@@ -47,6 +46,8 @@ puts "here"
             json = {}
           end
         end
+        Lita.redis.lpush('restaurant', restaurants)
+
         restaurants
 #        puts "Caching restaurant list"
 #        Lita.redis.set('restaurants', restaurants.to_json)
