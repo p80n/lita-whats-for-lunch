@@ -6,11 +6,11 @@ module LitaWhatsForLunch
 
 
     def ban_restaurant(response)
-      Lita.redis.lpush('banned', response.matches[0][0])
+      Lita.redis.sadd('banned', response.matches[0][0])
     end
 
     def list_restaurants(response)
-      response.reply("```#{restaurants(response)}```")
+      response.reply("```#{restaurants(response).sort.join("\n")}```")
     end
 
     def pick_restaurant(response)
@@ -24,11 +24,11 @@ module LitaWhatsForLunch
     end
 
     def banned_restaurants
-      Lita.redis.get('banned') || []
+      Lita.redis.smembers('banned') || []
     end
 
     def restaurants(response)
-      restaurants = Lita.redis.get('restaurants')
+      restaurants = Lita.redis.smembers('restaurants')
       unless restaurants
         restaurants = []
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
@@ -53,7 +53,7 @@ module LitaWhatsForLunch
             json = {}
           end
         end
-        Lita.redis.lpush('restaurant', restaurants)
+        Lita.redis.sadd('restaurant', restaurants)
 
         restaurants
 #        puts "Caching restaurant list"
