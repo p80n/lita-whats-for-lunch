@@ -21,6 +21,8 @@ module LitaWhatsForLunch
     # helper methods
     def restaurants(response)
       restaurants = Lita.redis.get('restaurants')
+      p restaurants
+      p restaurants.class
       unless restaurants
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         response.reply("Hmmmm.... this is a tough one....")
