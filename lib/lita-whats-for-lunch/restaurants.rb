@@ -15,7 +15,7 @@ module LitaWhatsForLunch
 
     def pick_restaurant(response)
       return unless valid?(response)
-      response.reply("You are going to: #{random_restaurant(response)}")
+      response.reply("you are going to: #{random_restaurant(response)}")
     end
 
     # helper methods
@@ -24,12 +24,12 @@ module LitaWhatsForLunch
     end
 
     def banned_restaurants
-      Lita.redis.smembers('banned') || []
+      lita.redis.smembers('banned') || []
     end
 
     def restaurants(response)
       restaurants = Lita.redis.smembers('restaurants')
-      unless restaurants
+      unless restaurants or restaurants.empty?
         restaurants = []
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         response.reply("Hmmmm.... this is a tough one....")
