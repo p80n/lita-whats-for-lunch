@@ -16,10 +16,10 @@ module Lita
       Lita.register_handler(self)
 
       def set_location(response)
-        redis.set('api-key', response.matches[0][0])
+        Lita.redis.set('api-key', response.matches[0][0])
       end
       def set_api_key(response)
-        redis.set('location-coordinates', response.matches[0][0])
+        Lita.redis.set('location-coordinates', response.matches[0][0])
       end
 
     end
