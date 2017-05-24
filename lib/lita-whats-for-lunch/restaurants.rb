@@ -54,12 +54,8 @@ module LitaWhatsForLunch
           end
         end
         Lita.redis.sadd('restaurant', restaurants)
-
-        restaurants
-#        puts "Caching restaurant list"
-#        Lita.redis.set('restaurants', restaurants.to_json)
-#        Lita.redis.expire('restaurants', 24 * 3600 * 7)
       end
+      restaurants
     end
 
     def valid?(response)
