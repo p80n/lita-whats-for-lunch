@@ -6,17 +6,24 @@ module LitaWhatsForLunch
 
 
     def ban_restaurant(response)
-
+      Lita.redis.lpush('banned', response.matches[0][0])
     end
 
 
     def pick_restaurant(response)
       return unless valid?(response)
-      response.reply("You are going to: #{restaurants(response).sample}")
+      response.reply("You are going to: #{random_restaurant}"
     end
 
-
     # helper methods
+    def random_restaurant
+      (restaurants(response) - banned_restaurants).sample
+    end
+
+    def banned_restaurants
+      Lita.redis.get('banned') || []
+    end
+
     def restaurants(response)
       restaurants = Lita.redis.get('restaurants')
       unless restaurants
@@ -34,10 +41,10 @@ module LitaWhatsForLunch
             restaurants << result['name'] }
           puts "Requesting next page of results in 5 seconds..."
           sleep 5
-          response.reply("Still pondering...")
           resp = RestClient.get("#{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}")
 
           if resp.code == 200
+            response.reply("Still pondering...")
             json = JSON.parse(resp.body)
           else
             json = {}
