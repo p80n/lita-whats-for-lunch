@@ -11,6 +11,7 @@ module LitaWhatsForLunch
     end
 
     def list_restaurants(response)
+      keyword = response.matches[0][0]
       response.reply("```#{restaurants(response).sort.join("\n")}```")
     end
 
@@ -55,6 +56,7 @@ module LitaWhatsForLunch
           json['results'].each {|result|
             puts "Adding #{result['name']}"
             restaurants << result['name'] }
+          break unless keyword.empty? # only the ~ first page of results seems pertinent for keyword searches
           puts "Requesting next page of results in 5 seconds..."
           sleep 5
           resp = RestClient.get("#{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}")
@@ -66,7 +68,7 @@ module LitaWhatsForLunch
             json = {}
           end
         end
-        Lita.redis.sadd('restaurants', restaurants)
+        Lita.redis.sadd("restaurants:#{keyword}", restaurants)
       end
       restaurants
     end
