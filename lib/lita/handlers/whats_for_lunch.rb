@@ -10,15 +10,15 @@ module Lita
       route(/lunch\?$/, :pick_restaurant, help: { "#{name}: lunch?" => '#{name} will help you answer the age old question' })
 
 
-      route(/lunch location (\w+)/, :set_location, help: { "#{name}: lunch location LAT,LONG" => 'Set the coordinates for searches to occur arround' })
+      route(/lunch location ([^\s]+)/, :set_location, help: { "#{name}: lunch location LAT,LONG" => 'Set the coordinates for searches to occur arround' })
       route(/lunch api-key (\w+)/, :set_api_key, help: { "#{name}: lunch api-key KEY" => 'Set the Google MAps API key to use' })
 
       Lita.register_handler(self)
 
-      def set_location(response)
+      def set_api_key(response)
         Lita.redis.set('api-key', response.matches[0][0])
       end
-      def set_api_key(response)
+      def set_location(response)
         Lita.redis.set('location-coordinates', response.matches[0][0])
       end
 
