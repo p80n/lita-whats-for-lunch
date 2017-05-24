@@ -24,7 +24,7 @@ module LitaWhatsForLunch
     end
 
     def banned_restaurants
-      lita.redis.smembers('banned') || []
+      Lita.redis.smembers('banned') || []
     end
 
     def restaurants(response)
