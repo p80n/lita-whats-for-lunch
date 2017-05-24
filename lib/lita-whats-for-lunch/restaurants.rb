@@ -40,6 +40,7 @@ module LitaWhatsForLunch
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         query = "#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}"
         query += "&keyword=#{keyword}" unless keyword.empty?
+        puts query
         resp = RestClient.get(query)
 
         # FIXME handle bad response
@@ -78,11 +79,11 @@ module LitaWhatsForLunch
     end
 
     def api_key
-      @api_key ||= Lita.redis.get('api-key')
+      @api_key ||= ENV['API_KEY'] || Lita.redis.get('api-key')
     end
 
     def location
-      @location ||= Lita.redis.get('location-coordinates')
+      @location ||= ENV['LOCATION_COORDINATES'] || Lita.redis.get('location-coordinates')
     end
 
   end
