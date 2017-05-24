@@ -20,6 +20,7 @@ module Lita
         Lita.redis.set('api-key', response.matches[0][0])
       end
       def set_location(response)
+        puts "Updating redis with location-coordinates #{response.matches[0][0]}"
         Lita.redis.set('location-coordinates', response.matches[0][0])
       end
 
