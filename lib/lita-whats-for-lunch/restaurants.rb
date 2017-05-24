@@ -17,25 +17,31 @@ module LitaWhatsForLunch
         return
       end
 
-      resp = RestClient.get("#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}")
-
-      # FIXME handle bad response
       restaurants = []
-      json = JSON.parse(resp.body)
+      if r = Lita.redis.get('restaurants')
+        restaurants = JSON::parse(r)
+      else
+        resp = RestClient.get("#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}")
 
-      while json['next_page_token']
-        json['results'].each {|result|
-          puts "Adding #{result['name']}"
-          restaurants << result['name'] }
-        puts "Requesting next page of restaurants: #{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}"
-        sleep 5
-        resp = RestClient.get("#{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}")
+        # FIXME handle bad response
+        json = JSON.parse(resp.body)
 
-        if resp.code == 200
-          json = JSON.parse(resp.body)
-        else
-          json = {}
+        while json['next_page_token']
+          json['results'].each {|result|
+            puts "Adding #{result['name']}"
+            restaurants << result['name'] }
+          puts "Requesting next page of restaurants: #{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}"
+          sleep 5
+          resp = RestClient.get("#{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}")
+
+          if resp.code == 200
+            json = JSON.parse(resp.body)
+          else
+            json = {}
+          end
         end
+        Lita.redis.set('restaurants', restaurants.to_json)
+        Lita.redis.expire('restaurants', 24 * 3600 * 7)
       end
 
       response.reply("You are going to #{restaurants.sample}")
