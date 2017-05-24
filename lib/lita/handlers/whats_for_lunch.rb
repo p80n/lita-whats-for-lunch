@@ -6,9 +6,9 @@ module Lita
       name = 'lita'
       Lita.configure{|config| name = config.robot.name}
 
-      route(/whats for lunch\??/, :pick_restaurant, help: { "#{name}: whats for lunch?" => '#{name} will help you answer the age old question' })
+      route(/whats for lunch\??/, :pick_restaurant, help: { "#{name}: whats for lunch?" => "#{name} will help you answer the age old question" })
       route(/lunch\?$/, :pick_restaurant, help: { "#{name}: lunch?" => 'see above' })
-      route(/lunch ban (.+)/, :ban_restaurant, help: { "#{name}: ban restaurant" => '#{name} will not suggest this place anymore' })
+      route(/lunch ban (.+)/, :ban_restaurant, help: { "#{name}: ban restaurant" => "#{name} will not suggest this place anymore" })
       route(/lunch options\s*(\w+)/, :list_restaurants, help: { "#{name}: lunch options [CUSINE]" => 'List restaurants, optionally limited to a keyword' })
 
       route(/what.?s for breakfast\??/, :pick_breakfast_spot, help: { "#{name}: what's for breakfast?" => 'Pick a spot for breakfast' } )
