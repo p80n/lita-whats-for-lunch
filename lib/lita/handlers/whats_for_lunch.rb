@@ -8,12 +8,17 @@ module Lita
 
       route(/whats for lunch\??/, :pick_restaurant, help: { "#{name}: whats for lunch?" => '#{name} will help you answer the age old question' })
       route(/lunch\?$/, :pick_restaurant, help: { "#{name}: lunch?" => '#{name} will help you answer the age old question' })
+      route(/lunch ban (\w+)/, :ban_restaurant, help: { "#{name}: ban restaurant" => '#{name} will not suggest the indicated dump anymore' })
 
 
       route(/lunch location ([^\s]+)/, :set_location, help: { "#{name}: lunch location LAT,LONG" => 'Set the coordinates for searches to occur arround' })
-      route(/lunch api-key (\w+)/, :set_api_key, help: { "#{name}: lunch api-key KEY" => 'Set the Google MAps API key to use' })
+      route(/lunch api-key (\w+)/, :set_api_key, help: { "#{name}: lunch api-key KEY" => 'Set the Google Maps API key to use' })
+
 
       Lita.register_handler(self)
+
+
+
 
       def set_api_key(response)
         puts "Updating redis with api-key #{response.matches[0][0]}"

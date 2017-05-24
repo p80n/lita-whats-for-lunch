@@ -5,22 +5,25 @@ module LitaWhatsForLunch
   module Restaurants
 
 
+    def ban_restaurant(response)
+
+    end
+
+
     def pick_restaurant(response)
-      api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
 
-      unless api_key
-        response.reply("Please provide me with the Google API key of your choosing")
-        return
-      end
-      unless location
-        response.reply("Please provide me with a location to center my search around")
-        return
-      end
+      return unless valid?(response)
 
-      restaurants = []
-      if r = Lita.redis.get('restaurants')
-        restaurants = JSON::parse(r)
-      else
+      response.reply("You are going to: #{restaurants(response).sample}")
+    end
+
+
+    # helper methods
+    def restaurants(response)
+      restaurants = Lita.redis.get('restaurants')
+      unless restaurants
+        api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+        response.reply("Hmmmm.... this is a tough one....")
         resp = RestClient.get("#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}")
 
         # FIXME handle bad response
@@ -29,9 +32,11 @@ module LitaWhatsForLunch
         while json['next_page_token']
           json['results'].each {|result|
             puts "Adding #{result['name']}"
+            Lita.redis.lpush(result['name'])
             restaurants << result['name'] }
-          puts "Requesting next page of restaurants: #{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}"
+          puts "Requesting next page of results in 5 seconds..."
           sleep 5
+          response.reply("Still pondering...")
           resp = RestClient.get("#{api_root}?pagetoken=#{json['next_page_token']}&key=#{api_key}")
 
           if resp.code == 200
@@ -40,14 +45,22 @@ module LitaWhatsForLunch
             json = {}
           end
         end
-        puts "Caching restaurant list"
-        Lita.redis.set('restaurants', restaurants.to_json)
-        Lita.redis.expire('restaurants', 24 * 3600 * 7)
+#        puts "Caching restaurant list"
+#        Lita.redis.set('restaurants', restaurants.to_json)
+#        Lita.redis.expire('restaurants', 24 * 3600 * 7)
       end
-
-      response.reply("You are going to: #{restaurants.sample}")
     end
 
+    def valid?(response)
+      unless api_key
+        response.reply("Please provide me with the Google API key of your choosing")
+        return
+      end
+      unless location
+        response.reply("Please provide me with a location to center my search around")
+        return
+      end
+    end
 
     def api_key
       @api_key ||= Lita.redis.get('api-key')
