@@ -8,7 +8,7 @@ module Lita
 
       route(/whats for lunch\??/, :pick_restaurant, help: { "#{name}: whats for lunch?" => '#{name} will help you answer the age old question' })
       route(/lunch\?$/, :pick_restaurant, help: { "#{name}: lunch?" => '#{name} will help you answer the age old question' })
-      route(/lunch ban\s+(\w+)\s*$/, :ban_restaurant, help: { "#{name}: ban restaurant" => '#{name} will not suggest the indicated dump anymore' })
+      route(/lunch ban (.+)/, :ban_restaurant, help: { "#{name}: ban restaurant" => '#{name} will not suggest this place anymore' })
       route(/lunch options/, :list_restaurants, help: { "#{name}: ban restaurant" => '#{name} will not suggest the indicated dump anymore' })
 
 
