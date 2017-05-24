@@ -9,14 +9,17 @@ module LitaWhatsForLunch
       Lita.redis.lpush('banned', response.matches[0][0])
     end
 
+    def list_restaurants(response)
+      response.reply("```#{restaurants(response)}```")
+    end
 
     def pick_restaurant(response)
       return unless valid?(response)
-      response.reply("You are going to: #{random_restaurant}")
+      response.reply("You are going to: #{random_restaurant(response)}")
     end
 
     # helper methods
-    def random_restaurant
+    def random_restaurant(response)
       (restaurants(response) - banned_restaurants).sample
     end
 
