@@ -11,9 +11,7 @@ module LitaWhatsForLunch
 
 
     def pick_restaurant(response)
-puts "pick_restaurant"
       return unless valid?(response)
-puts "here"
       response.reply("You are going to: #{restaurants(response).sample}")
     end
 
@@ -21,9 +19,8 @@ puts "here"
     # helper methods
     def restaurants(response)
       restaurants = Lita.redis.get('restaurants')
-      p restaurants
-      p restaurants.class
       unless restaurants
+        restaurants = []
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         response.reply("Hmmmm.... this is a tough one....")
         resp = RestClient.get("#{api_root}?location=#{location}&radius=500&type=restaurant&key=#{api_key}")
