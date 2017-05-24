@@ -29,7 +29,7 @@ module LitaWhatsForLunch
 
     def restaurants(response)
       restaurants = Lita.redis.smembers('restaurants')
-      unless restaurants or restaurants.empty?
+      if restaurants.nil? or restaurants.empty?
         restaurants = []
         api_root = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         response.reply("Hmmmm.... this is a tough one....")
