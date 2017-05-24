@@ -29,6 +29,16 @@ module LitaWhatsForLunch
       response.reply "What about #{random_restaurant(response,keyword)}?"
     end
 
+    def add_restaurant(response)
+      restaurant = response.matches[0][0]
+      if Lita.redis.smembers('restaurants').include?(restaurant)
+        response.reply "Already knew about #{restaurant}"
+      else
+        Lita.redis.sadd('restaurants', restaurant)
+        response.reply "Done! #{restaurant} has been added to the list"
+      end
+    end
+
     # helper methods
     def random_restaurant(response,keyword="")
       (restaurants(response,keyword) - banned_restaurants).sample

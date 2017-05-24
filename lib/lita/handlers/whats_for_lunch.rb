@@ -17,7 +17,7 @@ module Lita
 
       route(/lunch location ([^\s]+)/, :set_location, help: { "#{name}: lunch location LAT,LONG" => 'Set the coordinates for searches to occur arround' })
       route(/lunch api-key (\w+)/, :set_api_key, help: { "#{name}: lunch api-key KEY" => 'Set the Google Maps API key to use' })
-
+      route(/lunch add (.+)/, :add_restaurant)
 
       Lita.register_handler(self)
 
