@@ -20,7 +20,7 @@ module LitaWhatsForLunch
     end
 
     # helper methods
-    def pick_breakfast(response)
+    def pick_breakfast_spot(response)
       (restaurants(response,'breakfast') - banned_restaurants).sample
     end
 
