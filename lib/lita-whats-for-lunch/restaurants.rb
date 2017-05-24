@@ -40,11 +40,12 @@ module LitaWhatsForLunch
             json = {}
           end
         end
+        puts "Caching restaurant list"
         Lita.redis.set('restaurants', restaurants.to_json)
         Lita.redis.expire('restaurants', 24 * 3600 * 7)
       end
 
-      response.reply("You are going to #{restaurants.sample}")
+      response.reply("You are going to: #{restaurants.sample}")
     end
 
 
